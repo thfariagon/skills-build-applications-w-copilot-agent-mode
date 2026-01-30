@@ -17,10 +17,18 @@ import os
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
+
 from octofit_tracker.views import (
     api_root, UserViewSet, TeamViewSet, ActivityViewSet,
     LeaderboardViewSet, WorkoutViewSet
 )
+
+# Utilitário para construir URLs baseadas no ambiente do Codespace
+def get_api_base_url(request):
+    codespace_name = os.environ.get('CODESPACE_NAME')
+    if codespace_name:
+        return f"https://{codespace_name}-8000.app.github.dev/api/"
+    return request.build_absolute_uri('/api/')
 
 # Create a router and register our viewsets
 router = DefaultRouter()
